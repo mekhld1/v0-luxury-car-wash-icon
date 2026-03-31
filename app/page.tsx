@@ -127,19 +127,19 @@ export default function ShinyLogoShowcase() {
             {[
               { 
                 title: "Water Droplet",
-                desc: "Symbolizes premium car cleaning and water purity"
+                desc: "Pure, rounded shape symbolizing premium car cleaning"
               },
               { 
-                title: "S Curve",
-                desc: "Elegant initial representing the Shiny brand identity"
+                title: "Purple Gradient",
+                desc: "Deep violet to lavender gradient for luxury feel"
               },
               { 
-                title: "Sparkle Stars",
-                desc: "Represents the shine and gleam of a clean car"
+                title: "Glossy Shine",
+                desc: "Top highlight creates 3D glass-like reflection"
               },
               { 
-                title: "Glass Effect",
-                desc: "Premium 3D depth with glossy reflections"
+                title: "Clean Minimal",
+                desc: "Empty droplet for timeless, scalable design"
               },
             ].map(({ title, desc }) => (
               <div key={title} className="bg-slate-800/30 rounded-2xl p-6 border border-white/5">
