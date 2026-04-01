@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { X, Upload, Link as LinkIcon } from "lucide-react"
+import { X, Upload, Link as LinkIcon, Plus } from "lucide-react"
 import { type Service, type VehiclePricing } from "./service-card"
 import { useState, useEffect } from "react"
 
@@ -23,7 +23,7 @@ interface ServicePanelProps {
   editingService?: Service | null
 }
 
-const categories = [
+const defaultCategories = [
   "Exterior Wash",
   "Interior Cleaning",
   "Full Detail",
@@ -67,6 +67,9 @@ export function ServicePanel({
   const [videoUrl, setVideoUrl] = useState("")
   const [includeVat, setIncludeVat] = useState(true)
   const [pricing, setPricing] = useState<VehiclePricing>(defaultPricing)
+  const [categories, setCategories] = useState(defaultCategories)
+  const [isAddingCategory, setIsAddingCategory] = useState(false)
+  const [newCategory, setNewCategory] = useState("")
 
   useEffect(() => {
     if (editingService) {
@@ -96,6 +99,15 @@ export function ServicePanel({
       ...prev,
       [key]: Number(value) || 0,
     }))
+  }
+
+  const handleAddCategory = () => {
+    if (newCategory.trim() && !categories.includes(newCategory.trim())) {
+      setCategories((prev) => [...prev, newCategory.trim()])
+      setCategory(newCategory.trim())
+      setNewCategory("")
+      setIsAddingCategory(false)
+    }
   }
 
   const handleSave = () => {
@@ -190,18 +202,49 @@ export function ServicePanel({
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Category</Label>
-                <Select value={category} onValueChange={setCategory}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {categories.map((cat) => (
-                      <SelectItem key={cat} value={cat}>
-                        {cat}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                {isAddingCategory ? (
+                  <div className="flex gap-2">
+                    <Input
+                      value={newCategory}
+                      onChange={(e) => setNewCategory(e.target.value)}
+                      placeholder="New category name"
+                      onKeyDown={(e) => e.key === "Enter" && handleAddCategory()}
+                    />
+                    <Button size="sm" onClick={handleAddCategory}>
+                      Add
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        setIsAddingCategory(false)
+                        setNewCategory("")
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                ) : (
+                  <Select value={category} onValueChange={setCategory}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((cat) => (
+                        <SelectItem key={cat} value={cat}>
+                          {cat}
+                        </SelectItem>
+                      ))}
+                      <button
+                        onClick={() => setIsAddingCategory(true)}
+                        className="relative flex w-full cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm text-primary outline-none hover:bg-accent"
+                      >
+                        <Plus className="h-4 w-4" />
+                        Add new category
+                      </button>
+                    </SelectContent>
+                  </Select>
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="duration">Duration (minutes)</Label>

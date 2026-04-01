@@ -5,7 +5,8 @@ import { DashboardSidebar } from "@/components/dashboard-sidebar"
 import { ServiceCard, type Service } from "@/components/service-card"
 import { ServicePanel } from "@/components/service-panel"
 import { Button } from "@/components/ui/button"
-import { Plus, Sparkles } from "lucide-react"
+import { Plus, Sparkles, Search } from "lucide-react"
+import { Input } from "@/components/ui/input"
 
 const mockServices: Service[] = [
   {
@@ -54,6 +55,19 @@ export default function ServicesPage() {
   const [services, setServices] = useState<Service[]>(mockServices)
   const [isPanelOpen, setIsPanelOpen] = useState(false)
   const [editingService, setEditingService] = useState<Service | null>(null)
+  const [searchQuery, setSearchQuery] = useState("")
+  const [activeCategory, setActiveCategory] = useState("All")
+
+  const categories = ["All", ...Array.from(new Set(services.map((s) => s.category)))]
+
+  const filteredServices = services.filter((service) => {
+    const matchesSearch =
+      service.nameEn.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      service.nameAr.includes(searchQuery)
+    const matchesCategory =
+      activeCategory === "All" || service.category === activeCategory
+    return matchesSearch && matchesCategory
+  })
 
   const handleAddService = () => {
     setEditingService(null)
@@ -123,10 +137,41 @@ export default function ServicesPage() {
             </Button>
           </div>
 
+          {/* Search and Category Filters */}
+          <div className="mb-6 space-y-4">
+            {/* Search Bar */}
+            <div className="relative max-w-md">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search services..."
+                className="pl-10"
+              />
+            </div>
+
+            {/* Category Tabs */}
+            <div className="flex flex-wrap gap-2">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setActiveCategory(category)}
+                  className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                    activeCategory === category
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Services List */}
-          {services.length > 0 ? (
+          {filteredServices.length > 0 ? (
             <div className="space-y-4">
-              {services.map((service) => (
+              {filteredServices.map((service) => (
                 <ServiceCard
                   key={service.id}
                   service={service}
