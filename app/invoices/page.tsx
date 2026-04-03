@@ -33,6 +33,8 @@ import {
   Phone,
   Car,
   CreditCard,
+  FileText,
+  RotateCcw,
 } from "lucide-react"
 import {
   Dialog,
