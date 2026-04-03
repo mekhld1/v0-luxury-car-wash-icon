@@ -415,6 +415,7 @@ export default function CustomersPage() {
               )}
             </TableBody>
           </Table>
+            </div>
           </div>
         </div>
       </main>

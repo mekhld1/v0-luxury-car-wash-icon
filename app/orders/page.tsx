@@ -428,6 +428,7 @@ export default function OrdersPage() {
               ))}
             </TableBody>
           </Table>
+            </div>
           </div>
         </div>
       </main>
