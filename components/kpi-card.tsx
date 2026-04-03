@@ -18,6 +18,8 @@ import {
   CheckCircle2,
   RotateCcw,
   Package,
+  Layers,
+  Calendar,
 } from "lucide-react"
 import type { ReactNode } from "react"
 
@@ -38,6 +40,8 @@ const iconMap = {
   "check-circle": CheckCircle2,
   "rotate-ccw": RotateCcw,
   "package": Package,
+  "layers": Layers,
+  "calendar": Calendar,
 } as const
 
 export type KpiIconName = keyof typeof iconMap
