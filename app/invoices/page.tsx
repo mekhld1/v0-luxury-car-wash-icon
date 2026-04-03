@@ -1,6 +1,7 @@
 "use client"
 
-// Invoices Management Page - Full and Partial Refund Support
+// Invoices Management Page - v2
+// Supports full and partial refunds with proper validation
 import { useState } from "react"
 import { DashboardSidebar } from "@/components/dashboard-sidebar"
 import { KpiCard } from "@/components/kpi-card"
@@ -823,7 +824,7 @@ export default function InvoicesPage() {
 
       {/* Refund Modal */}
       <Dialog open={isRefundDialogOpen} onOpenChange={setIsRefundDialogOpen}>
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent className="sm:max-w-lg" aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle className="text-xl">Process Refund</DialogTitle>
           </DialogHeader>
