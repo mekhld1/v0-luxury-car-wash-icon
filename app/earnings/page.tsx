@@ -35,11 +35,23 @@ import {
   Calendar,
   ArrowUpRight,
   ArrowDownRight,
+  Eye,
+  RotateCcw,
+  AlertTriangle,
 } from "lucide-react"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 
 type PeriodFilter = "today" | "week" | "month" | "quarter" | "year" | "custom"
-type SubTab = "overview" | "services" | "crew" | "transactions"
-type TransactionStatus = "Completed" | "Pending" | "Refunded"
+type SubTab = "overview" | "services" | "crew" | "invoices"
+type InvoiceStatus = "Paid" | "Pending" | "Refunded"
+type PaymentMethod = "Apple Pay" | "Mada" | "Visa" | "Mastercard" | "STC Pay" | "Tabby" | "Tamara" | "Package"
 
 interface ServiceEarning {
   rank: number
@@ -57,14 +69,16 @@ interface CrewEarning {
   performance: number
 }
 
-interface Transaction {
+interface Invoice {
   id: string
   orderId: string
   customerName: string
   service: string
-  amount: number
-  paymentMethod: "Cash" | "Card" | "Apple Pay"
-  status: TransactionStatus
+  crew: string
+  vat: number
+  total: number
+  paymentMethod: PaymentMethod
+  status: InvoiceStatus
   date: string
   time: string
 }
@@ -111,99 +125,115 @@ const mockCrewEarnings: CrewEarning[] = [
   { rank: 5, name: "Faisal Al-Dosari", orders: 45, revenue: 13500, performance: 78 },
 ]
 
-const mockTransactions: Transaction[] = [
+const mockInvoices: Invoice[] = [
   {
-    id: "TXN-001",
+    id: "INV-001",
     orderId: "ORD-001",
     customerName: "Ahmed Al-Rashid",
     service: "Premium Wash",
-    amount: 299,
-    paymentMethod: "Card",
-    status: "Completed",
+    crew: "Yusuf Al-Malki",
+    vat: 39,
+    total: 299,
+    paymentMethod: "Apple Pay",
+    status: "Paid",
     date: "Apr 1, 2026",
     time: "10:30 AM",
   },
   {
-    id: "TXN-002",
+    id: "INV-002",
     orderId: "ORD-002",
     customerName: "Mohammed Hassan",
     service: "Full Detail",
-    amount: 699,
-    paymentMethod: "Apple Pay",
-    status: "Completed",
+    crew: "Omar Hassan",
+    vat: 91,
+    total: 699,
+    paymentMethod: "Mada",
+    status: "Paid",
     date: "Apr 1, 2026",
     time: "09:45 AM",
   },
   {
-    id: "TXN-003",
+    id: "INV-003",
     orderId: "ORD-003",
     customerName: "Khalid Ibrahim",
     service: "Interior Cleaning",
-    amount: 225,
-    paymentMethod: "Cash",
+    crew: "Khaled Ibrahim",
+    vat: 29,
+    total: 225,
+    paymentMethod: "STC Pay",
     status: "Pending",
     date: "Apr 1, 2026",
     time: "09:15 AM",
   },
   {
-    id: "TXN-004",
+    id: "INV-004",
     orderId: "ORD-004",
     customerName: "Fahad Al-Mutairi",
     service: "Express Wash",
-    amount: 100,
-    paymentMethod: "Card",
-    status: "Completed",
+    crew: "Faisal Al-Dosari",
+    vat: 13,
+    total: 100,
+    paymentMethod: "Visa",
+    status: "Paid",
     date: "Mar 31, 2026",
     time: "04:30 PM",
   },
   {
-    id: "TXN-005",
+    id: "INV-005",
     orderId: "ORD-005",
     customerName: "Sultan Al-Dosari",
     service: "Ceramic Coating",
-    amount: 1299,
-    paymentMethod: "Card",
-    status: "Completed",
+    crew: "Yusuf Al-Malki",
+    vat: 169,
+    total: 1299,
+    paymentMethod: "Tabby",
+    status: "Paid",
     date: "Mar 31, 2026",
     time: "02:00 PM",
   },
   {
-    id: "TXN-006",
+    id: "INV-006",
     orderId: "ORD-006",
     customerName: "Nasser Al-Qahtani",
     service: "Premium Wash",
-    amount: 349,
-    paymentMethod: "Cash",
+    crew: "Omar Hassan",
+    vat: 45,
+    total: 349,
+    paymentMethod: "Tamara",
     status: "Refunded",
     date: "Mar 31, 2026",
     time: "11:00 AM",
   },
   {
-    id: "TXN-007",
+    id: "INV-007",
     orderId: "ORD-007",
     customerName: "Turki Al-Shehri",
     service: "Full Detail",
-    amount: 699,
-    paymentMethod: "Apple Pay",
-    status: "Completed",
+    crew: "Khaled Ibrahim",
+    vat: 91,
+    total: 699,
+    paymentMethod: "Package",
+    status: "Paid",
     date: "Mar 30, 2026",
     time: "03:45 PM",
   },
   {
-    id: "TXN-008",
+    id: "INV-008",
     orderId: "ORD-008",
     customerName: "Abdullah Al-Ghamdi",
     service: "Interior Cleaning",
-    amount: 225,
-    paymentMethod: "Card",
-    status: "Completed",
+    crew: "Faisal Al-Dosari",
+    vat: 29,
+    total: 225,
+    paymentMethod: "Mastercard",
+    status: "Paid",
     date: "Mar 30, 2026",
     time: "01:20 PM",
   },
 ]
 
-const transactionStatusStyles: Record<TransactionStatus, string> = {
-  Completed: "bg-green-100 text-green-700",
+const invoiceStatusStyles: Record<InvoiceStatus, string> = {
+  Paid: "bg-green-100 text-green-700",
   Pending: "bg-yellow-100 text-yellow-700",
   Refunded: "bg-red-100 text-red-700",
 }
@@ -215,6 +245,9 @@ export default function EarningsPage() {
   const [activeTab, setActiveTab] = useState<SubTab>("overview")
   const [dateFrom, setDateFrom] = useState("")
   const [dateTo, setDateTo] = useState("")
+  const [invoices, setInvoices] = useState<Invoice[]>(mockInvoices)
+  const [refundInvoice, setRefundInvoice] = useState<Invoice | null>(null)
+  const [isRefundDialogOpen, setIsRefundDialogOpen] = useState(false)
 
   // Mock stats - would be computed from real data
   const stats = {
@@ -232,11 +265,32 @@ export default function EarningsPage() {
     console.log("Exporting to PDF...")
   }
 
+  const handleViewPDF = (invoice: Invoice) => {
+    console.log("Viewing PDF for invoice:", invoice.id)
+  }
+
+  const handleRefundClick = (invoice: Invoice) => {
+    setRefundInvoice(invoice)
+    setIsRefundDialogOpen(true)
+  }
+
+  const handleConfirmRefund = () => {
+    if (refundInvoice) {
+      setInvoices((prev) =>
+        prev.map((inv) =>
+          inv.id === refundInvoice.id ? { ...inv, status: "Refunded" as InvoiceStatus } : inv
+        )
+      )
+      setIsRefundDialogOpen(false)
+      setRefundInvoice(null)
+    }
+  }
+
   const subTabs: { key: SubTab; label: string }[] = [
     { key: "overview", label: "Overview" },
     { key: "services", label: "Services" },
     { key: "crew", label: "Crew" },
-    { key: "transactions", label: "Transactions" },
+    { key: "invoices", label: "Invoices" },
   ]
 
   return (
@@ -339,16 +393,16 @@ export default function EarningsPage() {
         <div className="mb-8 grid grid-cols-4 gap-4">
           <Card className="rounded-2xl border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10 shadow-sm">
             <CardContent className="p-6">
-              <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/20">
+              <div className="flex items-center gap-3 overflow-hidden">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/20">
                   <Wallet className="h-6 w-6 text-primary" />
                 </div>
-                <div>
+                <div className="min-w-0 flex-1">
                   <p className="text-sm font-medium text-muted-foreground">
                     Total Revenue
                   </p>
-                  <p className="text-2xl font-bold text-foreground">
-                    SAR {stats.totalRevenue.toLocaleString()}
+                  <p className="truncate text-lg font-bold text-foreground sm:text-xl md:text-2xl">
+                    {stats.totalRevenue.toLocaleString()} SAR
                   </p>
                 </div>
               </div>
@@ -593,65 +647,87 @@ export default function EarningsPage() {
           </Card>
         )}
 
-        {activeTab === "transactions" && (
+        {activeTab === "invoices" && (
           <Card className="rounded-2xl border border-border shadow-sm">
             <CardHeader className="pb-4">
-              <CardTitle className="text-lg font-semibold">
-                Recent Transactions
-              </CardTitle>
+              <CardTitle className="text-lg font-semibold">Invoices</CardTitle>
             </CardHeader>
             <CardContent className="pt-0">
               <Table>
                 <TableHeader>
                   <TableRow className="hover:bg-transparent">
-                    <TableHead>Transaction ID</TableHead>
-                    <TableHead>Order</TableHead>
-                    <TableHead>Customer</TableHead>
-                    <TableHead>Service</TableHead>
-                    <TableHead>Payment</TableHead>
-                    <TableHead className="text-right">Amount</TableHead>
-                    <TableHead>Status</TableHead>
                     <TableHead>Date</TableHead>
+                    <TableHead>Order ID</TableHead>
+                    <TableHead>Service</TableHead>
+                    <TableHead>Crew</TableHead>
+                    <TableHead>Payment Method</TableHead>
+                    <TableHead className="text-right">VAT</TableHead>
+                    <TableHead className="text-right">Total</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {mockTransactions.map((txn) => (
-                    <TableRow key={txn.id}>
+                  {invoices.map((invoice) => (
+                    <TableRow key={invoice.id}>
+                      <TableCell>
+                        <div>
+                          <p className="text-foreground">{invoice.date}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {invoice.time}
+                          </p>
+                        </div>
+                      </TableCell>
                       <TableCell className="font-medium text-foreground">
-                        {txn.id}
+                        {invoice.orderId}
                       </TableCell>
                       <TableCell className="text-muted-foreground">
-                        {txn.orderId}
-                      </TableCell>
-                      <TableCell className="font-medium">
-                        {txn.customerName}
+                        {invoice.service}
                       </TableCell>
                       <TableCell className="text-muted-foreground">
-                        {txn.service}
+                        {invoice.crew}
                       </TableCell>
                       <TableCell className="text-muted-foreground">
-                        {txn.paymentMethod}
+                        {invoice.paymentMethod}
+                      </TableCell>
+                      <TableCell className="text-right text-muted-foreground">
+                        {invoice.vat} SAR
                       </TableCell>
                       <TableCell className="text-right font-medium">
-                        SAR {txn.amount}
+                        {invoice.total} SAR
                       </TableCell>
                       <TableCell>
                         <Badge
                           className={cn(
                             "font-medium",
-                            transactionStatusStyles[txn.status],
-                            `hover:${transactionStatusStyles[txn.status]}`
+                            invoiceStatusStyles[invoice.status]
                           )}
                         >
-                          {txn.status}
+                          {invoice.status}
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        <div>
-                          <p className="text-foreground">{txn.date}</p>
-                          <p className="text-xs text-muted-foreground">
-                            {txn.time}
-                          </p>
+                        <div className="flex items-center justify-end gap-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8"
+                            onClick={() => handleViewPDF(invoice)}
+                            title="View PDF"
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                          {invoice.status === "Paid" && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 text-red-600 hover:bg-red-50 hover:text-red-700"
+                              onClick={() => handleRefundClick(invoice)}
+                            >
+                              <RotateCcw className="mr-1 h-3.5 w-3.5" />
+                              Refund
+                            </Button>
+                          )}
                         </div>
                       </TableCell>
                     </TableRow>
@@ -661,6 +737,60 @@ export default function EarningsPage() {
             </CardContent>
           </Card>
         )}
+
+        {/* Refund Confirmation Dialog */}
+        <Dialog open={isRefundDialogOpen} onOpenChange={setIsRefundDialogOpen}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
+                <AlertTriangle className="h-6 w-6 text-red-600" />
+              </div>
+              <DialogTitle className="text-center">Confirm Refund</DialogTitle>
+              <DialogDescription className="text-center">
+                Are you sure you want to refund this invoice? This action cannot
+                be undone.
+              </DialogDescription>
+            </DialogHeader>
+            {refundInvoice && (
+              <div className="rounded-lg border border-border bg-muted/50 p-4">
+                <div className="grid grid-cols-2 gap-3 text-sm">
+                  <div>
+                    <p className="text-muted-foreground">Invoice ID</p>
+                    <p className="font-medium">{refundInvoice.id}</p>
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground">Order ID</p>
+                    <p className="font-medium">{refundInvoice.orderId}</p>
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground">Customer</p>
+                    <p className="font-medium">{refundInvoice.customerName}</p>
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground">Amount</p>
+                    <p className="font-medium text-red-600">
+                      {refundInvoice.total} SAR
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+            <DialogFooter className="gap-2 sm:gap-0">
+              <Button
+                variant="outline"
+                onClick={() => setIsRefundDialogOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={handleConfirmRefund}
+              >
+                Confirm Refund
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </main>
     </div>
   )
