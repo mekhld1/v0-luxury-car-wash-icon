@@ -307,6 +307,7 @@ export default function CustomersPage() {
             icon={Wallet}
             label="Total Revenue"
             value={<SARAmount amount={stats.totalRevenue} />}
+            mobileValue={stats.totalRevenue}
           />
         </div>
 

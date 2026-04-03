@@ -396,8 +396,21 @@ export default function EarningsPage() {
         {/* KPI Cards */}
         <div className="mb-6 grid grid-cols-2 gap-3 sm:gap-4 lg:mb-8 lg:grid-cols-4">
           <Card className="rounded-2xl border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10 shadow-sm">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-3 overflow-hidden">
+            <CardContent className="p-3 md:p-6">
+              {/* Mobile Layout */}
+              <div className="flex flex-col items-center text-center md:hidden">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/20">
+                  <Wallet className="h-4 w-4 text-primary" />
+                </div>
+                <p className="mt-1.5 text-[11px] leading-tight text-muted-foreground">
+                  Total Revenue
+                </p>
+                <p className="mt-1 text-base font-bold leading-tight text-foreground">
+                  {stats.totalRevenue.toLocaleString()}<span className="mr-0.5 text-xs font-medium"> ر.س</span>
+                </p>
+              </div>
+              {/* Desktop Layout */}
+              <div className="hidden items-center gap-3 overflow-hidden md:flex">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/20">
                   <Wallet className="h-6 w-6 text-primary" />
                 </div>
@@ -405,7 +418,7 @@ export default function EarningsPage() {
                   <p className="text-sm font-medium text-muted-foreground">
                     Total Revenue
                   </p>
-                  <p className="truncate text-lg font-bold text-foreground sm:text-xl md:text-2xl">
+                  <p className="truncate text-2xl font-bold text-foreground">
                     <SARAmount amount={stats.totalRevenue} />
                   </p>
                 </div>
@@ -417,6 +430,7 @@ export default function EarningsPage() {
             icon={Receipt}
             label="VAT Collected"
             value={<SARAmount amount={stats.vatCollected} />}
+            mobileValue={stats.vatCollected}
           />
           <KpiCard
             icon={CheckCircle2}
@@ -427,6 +441,7 @@ export default function EarningsPage() {
             icon={TrendingUp}
             label="Avg. Order Value"
             value={<SARAmount amount={stats.avgOrderValue} />}
+            mobileValue={stats.avgOrderValue}
           />
         </div>
 

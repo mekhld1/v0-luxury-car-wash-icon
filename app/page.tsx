@@ -1,3 +1,5 @@
+"use client"
+
 import { DashboardSidebar } from "@/components/dashboard-sidebar"
 import { KpiCard } from "@/components/kpi-card"
 import { OrdersTable } from "@/components/orders-table"
@@ -45,12 +47,14 @@ export default function DashboardPage() {
               icon={Banknote}
               label="Revenue Today"
               value={<SARAmount amount={8450} />}
+              mobileValue={8450}
               trend={{ value: 8, isPositive: true }}
             />
             <KpiCard
               icon={TrendingUp}
               label="Monthly Revenue"
               value={<SARAmount amount={142500} />}
+              mobileValue={142500}
               trend={{ value: 15, isPositive: true }}
             />
             <KpiCard
