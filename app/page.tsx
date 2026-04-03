@@ -1,17 +1,7 @@
-"use client"
-
-// Dashboard page for Shiny provider portal - v2
 import { DashboardSidebar } from "@/components/dashboard-sidebar"
 import { KpiCard } from "@/components/kpi-card"
 import { OrdersTable } from "@/components/orders-table"
 import { SARAmount } from "@/components/sar-symbol"
-import {
-  ShoppingBag,
-  Banknote,
-  TrendingUp,
-  Users,
-  Clock,
-} from "lucide-react"
 
 export default function DashboardPage() {
   const today = new Date().toLocaleDateString("en-US", {
@@ -39,33 +29,33 @@ export default function DashboardPage() {
           {/* KPI Cards */}
           <div className="mb-6 grid grid-cols-2 gap-3 sm:gap-4 lg:mb-8 lg:grid-cols-5">
             <KpiCard
-              icon={ShoppingBag}
+              icon="shopping-bag"
               label="Orders Today"
               value={24}
               trend={{ value: 12, isPositive: true }}
             />
             <KpiCard
-              icon={Banknote}
+              icon="banknote"
               label="Revenue Today"
               value={<SARAmount amount={8450} />}
               mobileValue={8450}
               trend={{ value: 8, isPositive: true }}
             />
             <KpiCard
-              icon={TrendingUp}
+              icon="trending-up"
               label="Monthly Revenue"
               value={<SARAmount amount={142500} />}
               mobileValue={142500}
               trend={{ value: 15, isPositive: true }}
             />
             <KpiCard
-              icon={Users}
+              icon="users"
               label="Active Crew"
               value={8}
               trend={{ value: 0, isPositive: true }}
             />
             <KpiCard
-              icon={Clock}
+              icon="clock"
               label="Pending Orders"
               value={5}
               trend={{ value: 2, isPositive: false }}

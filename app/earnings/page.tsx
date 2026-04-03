@@ -28,9 +28,6 @@ import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import {
   Wallet,
-  Receipt,
-  CheckCircle2,
-  TrendingUp,
   Download,
   FileText,
   Calendar,
@@ -427,18 +424,18 @@ export default function EarningsPage() {
           </Card>
 
           <KpiCard
-            icon={Receipt}
+            icon="receipt"
             label="VAT Collected"
             value={<SARAmount amount={stats.vatCollected} />}
             mobileValue={stats.vatCollected}
           />
           <KpiCard
-            icon={CheckCircle2}
+            icon="check-circle"
             label="Completed Orders"
             value={stats.completedOrders}
           />
           <KpiCard
-            icon={TrendingUp}
+            icon="trending-up"
             label="Avg. Order Value"
             value={<SARAmount amount={stats.avgOrderValue} />}
             mobileValue={stats.avgOrderValue}

@@ -18,10 +18,6 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import {
-  UsersRound,
-  Package,
-  ShoppingCart,
-  Wallet,
   Download,
   Search,
   Eye,
@@ -289,22 +285,22 @@ export default function CustomersPage() {
         {/* Stats Row */}
         <div className="mb-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           <KpiCard
-            icon={UsersRound}
+            icon="users-round"
             label="Total Customers"
             value={stats.totalCustomers}
           />
           <KpiCard
-            icon={Package}
+            icon="package"
             label="Active Packages"
             value={stats.activePackages}
           />
           <KpiCard
-            icon={ShoppingCart}
+            icon="shopping-cart"
             label="Avg Orders"
             value={stats.avgOrders}
           />
           <KpiCard
-            icon={Wallet}
+            icon="wallet"
             label="Total Revenue"
             value={<SARAmount amount={stats.totalRevenue} />}
             mobileValue={stats.totalRevenue}

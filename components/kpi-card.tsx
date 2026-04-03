@@ -2,11 +2,48 @@
 
 import { cn } from "@/lib/utils"
 import { SARSymbol } from "@/components/sar-symbol"
-import type { LucideIcon } from "lucide-react"
+import {
+  ShoppingBag,
+  ShoppingCart,
+  Banknote,
+  TrendingUp,
+  Users,
+  UsersRound,
+  Clock,
+  UserPlus,
+  UserCheck,
+  Wallet,
+  FileText,
+  Receipt,
+  CheckCircle2,
+  RotateCcw,
+  Package,
+} from "lucide-react"
 import type { ReactNode } from "react"
 
+// Map of icon names to icon components
+const iconMap = {
+  "shopping-bag": ShoppingBag,
+  "shopping-cart": ShoppingCart,
+  "banknote": Banknote,
+  "trending-up": TrendingUp,
+  "users": Users,
+  "users-round": UsersRound,
+  "clock": Clock,
+  "user-plus": UserPlus,
+  "user-check": UserCheck,
+  "wallet": Wallet,
+  "file-text": FileText,
+  "receipt": Receipt,
+  "check-circle": CheckCircle2,
+  "rotate-ccw": RotateCcw,
+  "package": Package,
+} as const
+
+export type KpiIconName = keyof typeof iconMap
+
 interface KpiCardProps {
-  icon: LucideIcon
+  icon: KpiIconName
   label: string
   value: string | number | ReactNode
   /** Raw numeric value for mobile display (without SAR symbol) */
@@ -18,7 +55,10 @@ interface KpiCardProps {
   className?: string
 }
 
-export function KpiCard({ icon: Icon, label, value, mobileValue, trend, className }: KpiCardProps) {
+export function KpiCard({ icon, label, value, mobileValue, trend, className }: KpiCardProps) {
+  // Get the icon component from the map
+  const Icon = iconMap[icon]
+  
   // Determine if this is a currency card (has mobileValue)
   const isCurrencyCard = mobileValue !== undefined
 

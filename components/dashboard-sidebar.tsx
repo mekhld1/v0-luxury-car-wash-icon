@@ -11,6 +11,7 @@ import {
   Users,
   UsersRound,
   Wallet,
+  FileText,
   Settings,
   LogOut,
   Phone,
@@ -28,6 +29,7 @@ const navItems = [
   { icon: UsersRound, label: "Customers", href: "/customers" },
   { icon: Users, label: "Crew", href: "/crew" },
   { icon: Wallet, label: "Earnings", href: "/earnings" },
+  { icon: FileText, label: "Invoices", href: "/invoices" },
   { icon: Settings, label: "Settings", href: "/settings" },
 ]
 
