@@ -1,6 +1,6 @@
 "use client"
 
-// Invoices Management Page
+// Invoices Management Page - Full and Partial Refund Support
 import { useState } from "react"
 import { DashboardSidebar } from "@/components/dashboard-sidebar"
 import { KpiCard } from "@/components/kpi-card"
@@ -40,15 +40,18 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
+import { useToast } from "@/hooks/use-toast"
 
-type InvoiceStatus = "Paid" | "Pending" | "Refunded"
+type InvoiceStatus = "Paid" | "Pending" | "Refunded" | "Partially Refunded"
 type PaymentMethod = "Apple Pay" | "Mada" | "Visa" | "Mastercard" | "STC Pay" | "Tabby" | "Tamara" | "Package"
-type StatusFilter = "All" | "Paid" | "Pending" | "Refunded"
+type StatusFilter = "All" | "Paid" | "Pending" | "Refunded" | "Partially Refunded"
+type RefundType = "full" | "partial"
 
 interface Invoice {
   id: string
@@ -64,6 +67,7 @@ interface Invoice {
   status: InvoiceStatus
   date: string
   time: string
+  refundedAmount?: number
 }
 
 const mockInvoices: Invoice[] = [
@@ -223,6 +227,7 @@ const invoiceStatusStyles: Record<InvoiceStatus, string> = {
   Paid: "bg-green-100 text-green-700",
   Pending: "bg-yellow-100 text-yellow-700",
   Refunded: "bg-red-100 text-red-700",
+  "Partially Refunded": "bg-purple-100 text-purple-700",
 }
 
 const paymentMethods: PaymentMethod[] = [
@@ -247,24 +252,31 @@ export default function InvoicesPage() {
   const [isPanelOpen, setIsPanelOpen] = useState(false)
   const [refundInvoice, setRefundInvoice] = useState<Invoice | null>(null)
   const [isRefundDialogOpen, setIsRefundDialogOpen] = useState(false)
+  const [refundType, setRefundType] = useState<RefundType>("full")
+  const [refundAmount, setRefundAmount] = useState("")
+  const [refundReason, setRefundReason] = useState("")
+  const [refundError, setRefundError] = useState("")
+  const { toast } = useToast()
 
-  const statusTabs: StatusFilter[] = ["All", "Paid", "Pending", "Refunded"]
+  const statusTabs: StatusFilter[] = ["All", "Paid", "Pending", "Refunded", "Partially Refunded"]
 
   // Stats
   const stats = {
     totalInvoices: invoices.length,
     totalPaid: invoices
-      .filter((inv) => inv.status === "Paid")
-      .reduce((sum, inv) => sum + inv.total, 0),
+      .filter((inv) => inv.status === "Paid" || inv.status === "Partially Refunded")
+      .reduce((sum, inv) => sum + (inv.total - (inv.refundedAmount || 0)), 0),
     totalRefunded: invoices
-      .filter((inv) => inv.status === "Refunded")
-      .reduce((sum, inv) => sum + inv.total, 0),
+      .filter((inv) => inv.status === "Refunded" || inv.status === "Partially Refunded")
+      .reduce((sum, inv) => sum + (inv.refundedAmount || inv.total), 0),
   }
 
   // Filtered invoices
   const filteredInvoices = invoices.filter((invoice) => {
     const matchesStatus =
-      statusFilter === "All" || invoice.status === statusFilter
+      statusFilter === "All" || 
+      invoice.status === statusFilter ||
+      (statusFilter === "Refunded" && invoice.status === "Partially Refunded")
     const matchesPaymentMethod =
       paymentMethodFilter === "All" ||
       invoice.paymentMethod === paymentMethodFilter
@@ -333,21 +345,59 @@ export default function InvoicesPage() {
 
   const handleRefundClick = (invoice: Invoice) => {
     setRefundInvoice(invoice)
+    setRefundType("full")
+    setRefundAmount("")
+    setRefundReason("")
+    setRefundError("")
     setIsRefundDialogOpen(true)
   }
 
   const handleConfirmRefund = () => {
-    if (refundInvoice) {
-      setInvoices((prev) =>
-        prev.map((inv) =>
-          inv.id === refundInvoice.id
-            ? { ...inv, status: "Refunded" as InvoiceStatus }
-            : inv
-        )
-      )
-      setIsRefundDialogOpen(false)
-      setRefundInvoice(null)
+    if (!refundInvoice) return
+
+    // Validation for partial refund
+    if (refundType === "partial") {
+      const amount = parseFloat(refundAmount)
+      if (isNaN(amount) || amount <= 0) {
+        setRefundError("Please enter a valid refund amount")
+        return
+      }
+      if (amount > refundInvoice.total) {
+        setRefundError("Refund amount cannot exceed the invoice total")
+        return
+      }
+      if (!refundReason.trim()) {
+        setRefundError("Reason is required for partial refunds")
+        return
+      }
     }
+
+    const isFullRefund = refundType === "full"
+    const refundedAmount = isFullRefund ? refundInvoice.total : parseFloat(refundAmount)
+
+    setInvoices((prev) =>
+      prev.map((inv) =>
+        inv.id === refundInvoice.id
+          ? {
+              ...inv,
+              status: isFullRefund ? "Refunded" : "Partially Refunded",
+              refundedAmount: refundedAmount,
+            }
+          : inv
+      )
+    )
+
+    toast({
+      title: isFullRefund ? "Full Refund Processed" : "Partial Refund Processed",
+      description: `${refundInvoice.id} has been ${isFullRefund ? "fully" : "partially"} refunded.`,
+    })
+
+    setIsRefundDialogOpen(false)
+    setRefundInvoice(null)
+    setRefundType("full")
+    setRefundAmount("")
+    setRefundReason("")
+    setRefundError("")
   }
 
   const handleDownloadPDF = (invoice: Invoice) => {
@@ -532,7 +582,22 @@ export default function InvoicesPage() {
                         <SARAmount amount={invoice.vat} />
                       </TableCell>
                       <TableCell className="text-right font-medium">
-                        <SARAmount amount={invoice.total} />
+                        {invoice.refundedAmount ? (
+                          <div className="flex flex-col items-end">
+                            <span className="text-muted-foreground line-through">
+                              <SARAmount amount={invoice.total} />
+                            </span>
+                            <span className={invoice.status === "Refunded" ? "text-red-600" : "text-purple-600"}>
+                              {invoice.status === "Refunded" ? (
+                                <>-<SARAmount amount={invoice.refundedAmount} /></>
+                              ) : (
+                                <SARAmount amount={invoice.total - invoice.refundedAmount} />
+                              )}
+                            </span>
+                          </div>
+                        ) : (
+                          <SARAmount amount={invoice.total} />
+                        )}
                       </TableCell>
                       <TableCell>
                         <Badge
@@ -756,43 +821,177 @@ export default function InvoicesPage() {
         </>
       )}
 
-      {/* Refund Confirmation Dialog */}
+      {/* Refund Modal */}
       <Dialog open={isRefundDialogOpen} onOpenChange={setIsRefundDialogOpen}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-lg">
           <DialogHeader>
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
-              <AlertTriangle className="h-6 w-6 text-red-600" />
-            </div>
-            <DialogTitle className="text-center">Confirm Refund</DialogTitle>
-            <DialogDescription className="text-center">
-              Are you sure you want to refund this invoice? This action cannot
-              be undone.
-            </DialogDescription>
+            <DialogTitle className="text-xl">Process Refund</DialogTitle>
           </DialogHeader>
+          
           {refundInvoice && (
-            <div className="rounded-lg border border-border bg-muted/50 p-4">
-              <div className="grid grid-cols-2 gap-3 text-sm">
-                <div>
-                  <p className="text-muted-foreground">Invoice ID</p>
-                  <p className="font-medium">{refundInvoice.id}</p>
+            <div className="space-y-6">
+              {/* Invoice Summary */}
+              <div className="rounded-xl border border-border bg-muted/30 p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Invoice</p>
+                    <p className="font-semibold text-foreground">{refundInvoice.id}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-muted-foreground">Original Amount</p>
+                    <p className="text-lg font-bold text-foreground">
+                      <SARAmount amount={refundInvoice.total} />
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-muted-foreground">Order ID</p>
-                  <p className="font-medium">{refundInvoice.orderId}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground">Customer</p>
-                  <p className="font-medium">{refundInvoice.customerName}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground">Amount</p>
-                  <p className="font-medium text-red-600">
-                    <SARAmount amount={refundInvoice.total} />
-                  </p>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Customer: {refundInvoice.customerName}
+                </p>
+              </div>
+
+              {/* Refund Type Toggle */}
+              <div className="space-y-3">
+                <Label className="text-sm font-medium">Refund Type</Label>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setRefundType("full")
+                      setRefundError("")
+                    }}
+                    className={cn(
+                      "rounded-xl border-2 p-4 text-left transition-all",
+                      refundType === "full"
+                        ? "border-primary bg-primary/5"
+                        : "border-border hover:border-muted-foreground/30"
+                    )}
+                  >
+                    <p className="font-medium text-foreground">Full Refund</p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Refund entire amount
+                    </p>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setRefundType("partial")
+                      setRefundError("")
+                    }}
+                    className={cn(
+                      "rounded-xl border-2 p-4 text-left transition-all",
+                      refundType === "partial"
+                        ? "border-primary bg-primary/5"
+                        : "border-border hover:border-muted-foreground/30"
+                    )}
+                  >
+                    <p className="font-medium text-foreground">Partial Refund</p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Specify amount
+                    </p>
+                  </button>
                 </div>
               </div>
+
+              {/* Full Refund Details */}
+              {refundType === "full" && (
+                <div className="space-y-4">
+                  <div className="rounded-xl bg-red-50 p-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-red-700">Refund Amount</span>
+                      <span className="text-lg font-bold text-red-700">
+                        <SARAmount amount={refundInvoice.total} />
+                      </span>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="full-reason" className="text-sm">
+                      Reason (optional)
+                    </Label>
+                    <Textarea
+                      id="full-reason"
+                      value={refundReason}
+                      onChange={(e) => setRefundReason(e.target.value)}
+                      placeholder="Enter reason for refund..."
+                      className="resize-none"
+                      rows={3}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Partial Refund Details */}
+              {refundType === "partial" && (
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="refund-amount" className="text-sm">
+                      Refund Amount <span className="text-red-500">*</span>
+                    </Label>
+                    <div className="relative">
+                      <Input
+                        id="refund-amount"
+                        type="number"
+                        value={refundAmount}
+                        onChange={(e) => {
+                          setRefundAmount(e.target.value)
+                          setRefundError("")
+                        }}
+                        placeholder="0.00"
+                        className="pr-12"
+                        min="0"
+                        max={refundInvoice.total}
+                        step="0.01"
+                      />
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                        <SARSymbol />
+                      </div>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Maximum: <SARAmount amount={refundInvoice.total} />
+                    </p>
+                  </div>
+
+                  {refundAmount && parseFloat(refundAmount) > 0 && parseFloat(refundAmount) <= refundInvoice.total && (
+                    <div className="rounded-xl bg-orange-50 p-4">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium text-orange-700">
+                          Customer will be charged
+                        </span>
+                        <span className="text-lg font-bold text-orange-700">
+                          <SARAmount amount={refundInvoice.total - parseFloat(refundAmount)} />
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="space-y-2">
+                    <Label htmlFor="partial-reason" className="text-sm">
+                      Reason <span className="text-red-500">*</span>
+                    </Label>
+                    <Textarea
+                      id="partial-reason"
+                      value={refundReason}
+                      onChange={(e) => {
+                        setRefundReason(e.target.value)
+                        setRefundError("")
+                      }}
+                      placeholder="Enter reason for partial refund..."
+                      className="resize-none"
+                      rows={3}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Error Message */}
+              {refundError && (
+                <div className="flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-700">
+                  <AlertTriangle className="h-4 w-4 shrink-0" />
+                  {refundError}
+                </div>
+              )}
             </div>
           )}
+
           <DialogFooter className="gap-2 sm:gap-0">
             <Button
               variant="outline"
@@ -800,8 +999,12 @@ export default function InvoicesPage() {
             >
               Cancel
             </Button>
-            <Button variant="destructive" onClick={handleConfirmRefund}>
-              Confirm Refund
+            <Button
+              variant={refundType === "full" ? "destructive" : "default"}
+              onClick={handleConfirmRefund}
+              className={refundType === "partial" ? "bg-orange-500 hover:bg-orange-600" : ""}
+            >
+              {refundType === "full" ? "Confirm Full Refund" : "Confirm Partial Refund"}
             </Button>
           </DialogFooter>
         </DialogContent>
