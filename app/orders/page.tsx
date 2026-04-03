@@ -265,7 +265,8 @@ export default function OrdersPage() {
     <div className="min-h-screen bg-background">
       <DashboardSidebar />
       
-      <main className="ml-60 p-8">
+      <main className="pt-14 lg:ml-60 lg:pt-0">
+        <div className="p-4 sm:p-6 lg:p-8">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
@@ -281,7 +282,7 @@ export default function OrdersPage() {
         </div>
 
         {/* Stats Row */}
-        <div className="mb-8 grid grid-cols-5 gap-4">
+        <div className="mb-6 grid grid-cols-2 gap-3 sm:gap-4 lg:mb-8 lg:grid-cols-5">
           <KpiCard icon={ClipboardList} label="Total Orders" value={stats.total} />
           <KpiCard icon={Clock} label="Pending" value={stats.pending} />
           <KpiCard icon={Truck} label="Active" value={stats.active} />
@@ -344,7 +345,8 @@ export default function OrdersPage() {
           </div>
 
           {/* Table */}
-          <Table>
+          <div className="overflow-x-auto">
+          <Table className="min-w-[900px]">
             <TableHeader>
               <TableRow className="hover:bg-transparent">
                 <TableHead className="pl-6">Order ID</TableHead>
@@ -426,6 +428,7 @@ export default function OrdersPage() {
               ))}
             </TableBody>
           </Table>
+          </div>
         </div>
       </main>
 

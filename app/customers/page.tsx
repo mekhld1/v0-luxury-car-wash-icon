@@ -258,7 +258,8 @@ export default function CustomersPage() {
     <div className="min-h-screen bg-background">
       <DashboardSidebar />
 
-      <main className="ml-60 p-8">
+      <main className="pt-14 lg:ml-60 lg:pt-0">
+        <div className="p-4 sm:p-6 lg:p-8">
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">
           <div>
@@ -286,7 +287,7 @@ export default function CustomersPage() {
         </div>
 
         {/* Stats Row */}
-        <div className="mb-6 grid grid-cols-4 gap-4">
+        <div className="mb-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           <KpiCard
             icon={UsersRound}
             label="Total Customers"
@@ -330,7 +331,8 @@ export default function CustomersPage() {
           </div>
 
           {/* Table */}
-          <Table>
+          <div className="overflow-x-auto">
+          <Table className="min-w-[800px]">
             <TableHeader>
               <TableRow className="hover:bg-transparent">
                 <TableHead className="pl-6">Customer</TableHead>
@@ -413,6 +415,7 @@ export default function CustomersPage() {
               )}
             </TableBody>
           </Table>
+          </div>
         </div>
       </main>
 

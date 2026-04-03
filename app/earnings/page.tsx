@@ -298,7 +298,8 @@ export default function EarningsPage() {
     <div className="min-h-screen bg-background">
       <DashboardSidebar />
 
-      <main className="ml-60 p-8">
+      <main className="pt-14 lg:ml-60 lg:pt-0">
+        <div className="p-4 sm:p-6 lg:p-8">
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">
           <div>
@@ -391,7 +392,7 @@ export default function EarningsPage() {
         </div>
 
         {/* KPI Cards */}
-        <div className="mb-8 grid grid-cols-4 gap-4">
+        <div className="mb-6 grid grid-cols-2 gap-3 sm:gap-4 lg:mb-8 lg:grid-cols-4">
           <Card className="rounded-2xl border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10 shadow-sm">
             <CardContent className="p-6">
               <div className="flex items-center gap-3 overflow-hidden">
@@ -456,7 +457,8 @@ export default function EarningsPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-0">
-                <Table>
+                <div className="overflow-x-auto">
+                <Table className="min-w-[400px]">
                   <TableHeader>
                     <TableRow className="hover:bg-transparent">
                       <TableHead className="w-12">#</TableHead>
@@ -484,6 +486,7 @@ export default function EarningsPage() {
                     ))}
                   </TableBody>
                 </Table>
+                </div>
               </CardContent>
             </Card>
 
@@ -493,7 +496,8 @@ export default function EarningsPage() {
                 <CardTitle className="text-lg font-semibold">Top Crew</CardTitle>
               </CardHeader>
               <CardContent className="pt-0">
-                <Table>
+                <div className="overflow-x-auto">
+                <Table className="min-w-[500px]">
                   <TableHeader>
                     <TableRow className="hover:bg-transparent">
                       <TableHead className="w-12">#</TableHead>
@@ -531,6 +535,7 @@ export default function EarningsPage() {
                     ))}
                   </TableBody>
                 </Table>
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -544,7 +549,8 @@ export default function EarningsPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-0">
-              <Table>
+              <div className="overflow-x-auto">
+              <Table className="min-w-[600px]">
                 <TableHeader>
                   <TableRow className="hover:bg-transparent">
                     <TableHead className="w-12">#</TableHead>
@@ -590,6 +596,7 @@ export default function EarningsPage() {
                   ))}
                 </TableBody>
               </Table>
+              </div>
             </CardContent>
           </Card>
         )}
@@ -602,7 +609,8 @@ export default function EarningsPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-0">
-              <Table>
+              <div className="overflow-x-auto">
+              <Table className="min-w-[600px]">
                 <TableHeader>
                   <TableRow className="hover:bg-transparent">
                     <TableHead className="w-12">#</TableHead>
@@ -644,6 +652,7 @@ export default function EarningsPage() {
                   ))}
                 </TableBody>
               </Table>
+              </div>
             </CardContent>
           </Card>
         )}
@@ -654,7 +663,8 @@ export default function EarningsPage() {
               <CardTitle className="text-lg font-semibold">Invoices</CardTitle>
             </CardHeader>
             <CardContent className="pt-0">
-              <Table>
+              <div className="overflow-x-auto">
+              <Table className="min-w-[800px]">
                 <TableHeader>
                   <TableRow className="hover:bg-transparent">
                     <TableHead>Date</TableHead>
@@ -735,6 +745,7 @@ export default function EarningsPage() {
                   ))}
                 </TableBody>
               </Table>
+              </div>
             </CardContent>
           </Card>
         )}
@@ -792,6 +803,7 @@ export default function EarningsPage() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+        </div>
       </main>
     </div>
   )

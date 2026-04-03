@@ -121,8 +121,8 @@ export default function ServicesPage() {
     <div className="min-h-screen bg-background">
       <DashboardSidebar />
 
-      <main className="pl-60">
-        <div className="px-8 py-8">
+      <main className="pt-14 lg:pl-60 lg:pt-0">
+        <div className="p-4 sm:p-6 lg:p-8">
           {/* Header */}
           <div className="mb-8 flex items-center justify-between">
             <div>

@@ -81,10 +81,11 @@ const orders: Order[] = [
 export function OrdersTable() {
   return (
     <div className="rounded-2xl border border-border bg-card shadow-sm">
-      <div className="border-b border-border px-6 py-4">
+      <div className="border-b border-border px-4 py-4 sm:px-6">
         <h3 className="text-lg font-semibold text-foreground">Recent Orders</h3>
       </div>
-      <Table>
+      <div className="overflow-x-auto">
+        <Table className="min-w-[600px]">
         <TableHeader>
           <TableRow className="hover:bg-transparent">
             <TableHead className="pl-6">Order ID</TableHead>
@@ -123,7 +124,8 @@ export function OrdersTable() {
             </TableRow>
           ))}
         </TableBody>
-      </Table>
+        </Table>
+      </div>
     </div>
   )
 }

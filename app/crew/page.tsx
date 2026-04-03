@@ -195,7 +195,8 @@ export default function CrewPage() {
     <div className="min-h-screen bg-background">
       <DashboardSidebar />
 
-      <main className="ml-60 p-8">
+      <main className="pt-14 lg:ml-60 lg:pt-0">
+        <div className="p-4 sm:p-6 lg:p-8">
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">
           <div>
@@ -211,7 +212,7 @@ export default function CrewPage() {
         </div>
 
         {/* Stats Row */}
-        <div className="mb-6 grid grid-cols-4 gap-4">
+        <div className="mb-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           <KpiCard icon={Users} label="Total Crew" value={stats.total} />
           <KpiCard
             icon={UserCheck}
@@ -344,6 +345,7 @@ export default function CrewPage() {
             </Button>
           </Card>
         )}
+        </div>
       </main>
 
       {/* Add/Edit Panel */}
