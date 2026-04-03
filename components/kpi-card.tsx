@@ -1,6 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
+import { SARSymbol } from "@/components/sar-symbol"
 import type { LucideIcon } from "lucide-react"
 import type { ReactNode } from "react"
 
@@ -37,7 +38,7 @@ export function KpiCard({ icon: Icon, label, value, mobileValue, trend, classNam
         <p className="mt-1 text-base font-bold leading-tight text-foreground">
           {isCurrencyCard ? (
             <>
-              {mobileValue.toLocaleString()}<span className="mr-0.5 text-xs font-medium"> ر.س</span>
+              {mobileValue.toLocaleString()}<SARSymbol />
             </>
           ) : (
             value

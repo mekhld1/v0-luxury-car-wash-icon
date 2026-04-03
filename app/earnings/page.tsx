@@ -406,7 +406,7 @@ export default function EarningsPage() {
                   Total Revenue
                 </p>
                 <p className="mt-1 text-base font-bold leading-tight text-foreground">
-                  {stats.totalRevenue.toLocaleString()}<span className="mr-0.5 text-xs font-medium"> ر.س</span>
+                  {stats.totalRevenue.toLocaleString()}<SARSymbol />
                 </p>
               </div>
               {/* Desktop Layout */}

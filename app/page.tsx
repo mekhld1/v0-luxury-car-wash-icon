@@ -1,5 +1,6 @@
 "use client"
 
+// Dashboard page for Shiny provider portal
 import { DashboardSidebar } from "@/components/dashboard-sidebar"
 import { KpiCard } from "@/components/kpi-card"
 import { OrdersTable } from "@/components/orders-table"
