@@ -268,14 +268,14 @@ export default function OrdersPage() {
       <main className="pt-14 lg:ml-60 lg:pt-0">
         <div className="p-4 sm:p-6 lg:p-8">
         {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-6 flex flex-col gap-4 sm:mb-8 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Orders</h1>
-            <p className="mt-1 text-muted-foreground">
+            <h1 className="text-xl font-bold text-foreground sm:text-2xl">Orders</h1>
+            <p className="mt-1 text-sm text-muted-foreground sm:text-base">
               Manage and assign incoming orders
             </p>
           </div>
-          <Button variant="outline" onClick={handleExportCSV} className="gap-2">
+          <Button variant="outline" onClick={handleExportCSV} className="w-full gap-2 sm:w-auto">
             <Download className="h-4 w-4" />
             Export CSV
           </Button>
@@ -292,8 +292,8 @@ export default function OrdersPage() {
 
         {/* New Orders Section */}
         {pendingOrders.length > 0 && (
-          <div className="mb-8">
-            <div className="mb-4 flex items-center gap-2">
+          <div className="mb-6 sm:mb-8">
+            <div className="mb-3 flex items-center gap-2 sm:mb-4">
               <span className="relative flex h-3 w-3">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-yellow-400 opacity-75" />
                 <span className="relative inline-flex h-3 w-3 rounded-full bg-yellow-500" />
@@ -327,7 +327,7 @@ export default function OrdersPage() {
         {/* All Orders Table */}
         <div className="rounded-2xl border border-border bg-card shadow-sm">
           {/* Status Filter Tabs */}
-          <div className="flex gap-2 border-b border-border px-6 py-4">
+          <div className="flex flex-wrap gap-2 border-b border-border px-3 py-3 sm:px-6 sm:py-4">
             {statusTabs.map((tab) => (
               <button
                 key={tab}
@@ -428,8 +428,8 @@ export default function OrdersPage() {
               ))}
             </TableBody>
           </Table>
-            </div>
           </div>
+        </div>
         </div>
       </main>
 

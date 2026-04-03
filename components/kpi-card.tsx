@@ -16,18 +16,18 @@ export function KpiCard({ icon: Icon, label, value, trend, className }: KpiCardP
   return (
     <div
       className={cn(
-        "rounded-2xl border border-border bg-card p-5 shadow-sm transition-shadow hover:shadow-md",
+        "min-h-0 rounded-2xl border border-border bg-card p-3 shadow-sm transition-shadow hover:shadow-md sm:p-4 md:p-5",
         className
       )}
     >
-      <div className="flex items-start justify-between">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent">
-          <Icon className="h-5 w-5 text-primary" />
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent sm:h-10 sm:w-10 sm:rounded-xl">
+          <Icon className="h-4 w-4 text-primary sm:h-5 sm:w-5" />
         </div>
         {trend && (
           <span
             className={cn(
-              "text-xs font-medium",
+              "text-[10px] font-medium sm:text-xs",
               trend.isPositive ? "text-green-600" : "text-red-500"
             )}
           >
@@ -36,9 +36,9 @@ export function KpiCard({ icon: Icon, label, value, trend, className }: KpiCardP
           </span>
         )}
       </div>
-      <div className="mt-4">
-        <p className="text-2xl font-bold text-foreground">{value}</p>
-        <p className="mt-1 text-sm text-muted-foreground">{label}</p>
+      <div className="mt-2 min-w-0 sm:mt-3 md:mt-4">
+        <p className="truncate text-base font-bold text-foreground sm:text-lg md:text-xl lg:text-2xl">{value}</p>
+        <p className="mt-0.5 truncate text-xs text-muted-foreground sm:mt-1 sm:text-sm">{label}</p>
       </div>
     </div>
   )

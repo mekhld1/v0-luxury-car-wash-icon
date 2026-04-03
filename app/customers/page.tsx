@@ -261,28 +261,28 @@ export default function CustomersPage() {
       <main className="pt-14 lg:ml-60 lg:pt-0">
         <div className="p-4 sm:p-6 lg:p-8">
         {/* Header */}
-        <div className="mb-6 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">Customers</h1>
-            <p className="mt-1 text-muted-foreground">
-              View and manage your customer base
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            {/* Search Bar */}
-            <div className="relative w-72">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search customers..."
-                className="pl-10"
-              />
+        <div className="mb-6 space-y-4">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h1 className="text-xl font-bold text-foreground sm:text-2xl">Customers</h1>
+              <p className="mt-1 text-sm text-muted-foreground sm:text-base">
+                View and manage your customer base
+              </p>
             </div>
-            <Button variant="outline" onClick={handleExportCSV} className="gap-2">
+            <Button variant="outline" onClick={handleExportCSV} className="w-full gap-2 sm:w-auto">
               <Download className="h-4 w-4" />
               Export CSV
             </Button>
+          </div>
+          {/* Search Bar */}
+          <div className="relative w-full sm:max-w-xs md:max-w-sm">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search customers..."
+              className="pl-10"
+            />
           </div>
         </div>
 
@@ -313,7 +313,7 @@ export default function CustomersPage() {
         {/* Filter Tabs & Table */}
         <div className="rounded-2xl border border-border bg-card shadow-sm">
           {/* Filter Tabs */}
-          <div className="flex gap-2 border-b border-border px-6 py-4">
+          <div className="flex flex-wrap gap-2 border-b border-border px-3 py-3 sm:px-6 sm:py-4">
             {filterTabs.map((tab) => (
               <button
                 key={tab}
@@ -415,8 +415,8 @@ export default function CustomersPage() {
               )}
             </TableBody>
           </Table>
-            </div>
           </div>
+        </div>
         </div>
       </main>
 

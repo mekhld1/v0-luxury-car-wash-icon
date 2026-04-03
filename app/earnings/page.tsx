@@ -301,20 +301,22 @@ export default function EarningsPage() {
       <main className="pt-14 lg:ml-60 lg:pt-0">
         <div className="p-4 sm:p-6 lg:p-8">
         {/* Header */}
-        <div className="mb-6 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-foreground">Earnings</h1>
-            <p className="mt-1 text-muted-foreground">Your revenue overview</p>
-          </div>
-          <div className="flex gap-3">
-            <Button variant="outline" onClick={handleExportCSV} className="gap-2">
-              <Download className="h-4 w-4" />
-              Export CSV
-            </Button>
-            <Button variant="outline" onClick={handleExportPDF} className="gap-2">
-              <FileText className="h-4 w-4" />
-              Export PDF
-            </Button>
+        <div className="mb-6 space-y-4">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h1 className="text-xl font-bold text-foreground sm:text-2xl">Earnings</h1>
+              <p className="mt-1 text-sm text-muted-foreground sm:text-base">Your revenue overview</p>
+            </div>
+            <div className="flex gap-2 sm:gap-3">
+              <Button variant="outline" onClick={handleExportCSV} className="flex-1 gap-2 sm:flex-none">
+                <Download className="h-4 w-4" />
+                <span className="hidden sm:inline">Export</span> CSV
+              </Button>
+              <Button variant="outline" onClick={handleExportPDF} className="flex-1 gap-2 sm:flex-none">
+                <FileText className="h-4 w-4" />
+                <span className="hidden sm:inline">Export</span> PDF
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -338,34 +340,34 @@ export default function EarningsPage() {
 
         {/* Custom Date Range */}
         {periodFilter === "custom" && (
-          <div className="mb-4 flex items-center gap-4 rounded-xl border border-border bg-card p-4">
+          <div className="mb-4 flex flex-col gap-3 rounded-xl border border-border bg-card p-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4 sm:p-4">
             <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-muted-foreground" />
-              <Label className="text-sm text-muted-foreground">From</Label>
+              <Calendar className="h-4 w-4 shrink-0 text-muted-foreground" />
+              <Label className="shrink-0 text-sm text-muted-foreground">From</Label>
               <Input
                 type="date"
                 value={dateFrom}
                 onChange={(e) => setDateFrom(e.target.value)}
-                className="w-40"
+                className="w-full sm:w-40"
               />
             </div>
             <div className="flex items-center gap-2">
-              <Label className="text-sm text-muted-foreground">To</Label>
+              <Label className="shrink-0 text-sm text-muted-foreground">To</Label>
               <Input
                 type="date"
                 value={dateTo}
                 onChange={(e) => setDateTo(e.target.value)}
-                className="w-40"
+                className="w-full sm:w-40"
               />
             </div>
-            <Button size="sm">Apply</Button>
+            <Button size="sm" className="w-full sm:w-auto">Apply</Button>
           </div>
         )}
 
         {/* Filter Dropdowns */}
-        <div className="mb-6 flex gap-4">
+        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:gap-4">
           <Select value={serviceFilter} onValueChange={setServiceFilter}>
-            <SelectTrigger className="w-48">
+            <SelectTrigger className="w-full sm:w-48">
               <SelectValue placeholder="All Services" />
             </SelectTrigger>
             <SelectContent>
@@ -378,7 +380,7 @@ export default function EarningsPage() {
           </Select>
 
           <Select value={crewFilter} onValueChange={setCrewFilter}>
-            <SelectTrigger className="w-48">
+            <SelectTrigger className="w-full sm:w-48">
               <SelectValue placeholder="All Crew" />
             </SelectTrigger>
             <SelectContent>
@@ -429,7 +431,7 @@ export default function EarningsPage() {
         </div>
 
         {/* Sub Tabs */}
-        <div className="mb-6 flex gap-2 border-b border-border pb-4">
+        <div className="mb-6 flex flex-wrap gap-2 border-b border-border pb-4">
           {subTabs.map((tab) => (
             <button
               key={tab.key}

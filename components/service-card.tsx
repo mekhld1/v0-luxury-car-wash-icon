@@ -50,9 +50,9 @@ export function ServiceCard({
   ]
 
   return (
-    <div className="flex gap-5 rounded-2xl border border-border bg-card p-5 transition-shadow hover:shadow-md">
+    <div className="flex flex-col gap-4 rounded-2xl border border-border bg-card p-4 transition-shadow hover:shadow-md sm:flex-row sm:gap-5 sm:p-5">
       {/* Service Image */}
-      <div className="relative h-32 w-40 flex-shrink-0 overflow-hidden rounded-xl bg-muted">
+      <div className="relative h-40 w-full flex-shrink-0 overflow-hidden rounded-xl bg-muted sm:h-32 sm:w-40">
         <Image
           src={service.image}
           alt={service.nameEn}
@@ -64,35 +64,35 @@ export function ServiceCard({
       {/* Service Details */}
       <div className="flex flex-1 flex-col">
         {/* Header Row */}
-        <div className="mb-3 flex items-start justify-between">
-          <div>
-            <h3 className="text-lg font-semibold text-foreground">
+        <div className="mb-2 flex flex-wrap items-start justify-between gap-2 sm:mb-3">
+          <div className="min-w-0 flex-1">
+            <h3 className="truncate text-base font-semibold text-foreground sm:text-lg">
               {service.nameEn}
             </h3>
-            <p className="text-sm text-muted-foreground" dir="rtl">
+            <p className="truncate text-sm text-muted-foreground" dir="rtl">
               {service.nameAr}
             </p>
           </div>
           <Badge
             variant="secondary"
-            className="bg-secondary text-secondary-foreground"
+            className="shrink-0 bg-secondary text-secondary-foreground"
           >
             {service.category}
           </Badge>
         </div>
 
         {/* Duration */}
-        <div className="mb-3 flex items-center gap-2 text-sm text-muted-foreground">
-          <Clock className="h-4 w-4" />
+        <div className="mb-2 flex items-center gap-2 text-sm text-muted-foreground sm:mb-3">
+          <Clock className="h-4 w-4 shrink-0" />
           <span>{service.duration} minutes</span>
         </div>
 
         {/* Vehicle Pricing Tags */}
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-1.5 sm:gap-2">
           {vehicleTypes.map((vehicle) => (
             <span
               key={vehicle.key}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-muted px-3 py-1.5 text-sm"
+              className="inline-flex items-center gap-1 rounded-lg bg-muted px-2 py-1 text-xs sm:gap-1.5 sm:px-3 sm:py-1.5 sm:text-sm"
             >
               <span className="font-medium text-foreground">
                 {vehicle.label}
@@ -106,9 +106,9 @@ export function ServiceCard({
       </div>
 
       {/* Actions */}
-      <div className="flex flex-col items-end justify-between">
-        <div className="flex items-center gap-3">
-          <span className="text-sm text-muted-foreground">
+      <div className="flex flex-row items-center justify-between gap-3 border-t border-border pt-3 sm:flex-col sm:items-end sm:justify-between sm:border-t-0 sm:pt-0">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <span className="text-xs text-muted-foreground sm:text-sm">
             {service.isActive ? "Active" : "Inactive"}
           </span>
           <Switch
@@ -122,18 +122,18 @@ export function ServiceCard({
             variant="outline"
             size="sm"
             onClick={() => onEdit(service)}
-            className="gap-1.5"
+            className="gap-1 text-xs sm:gap-1.5 sm:text-sm"
           >
-            <Pencil className="h-4 w-4" />
+            <Pencil className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             Edit
           </Button>
           <Button
             variant="outline"
             size="sm"
             onClick={() => onDelete(service.id)}
-            className="gap-1.5 text-destructive hover:bg-destructive hover:text-destructive-foreground"
+            className="gap-1 text-xs text-destructive hover:bg-destructive hover:text-destructive-foreground sm:gap-1.5 sm:text-sm"
           >
-            <Trash2 className="h-4 w-4" />
+            <Trash2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             Delete
           </Button>
         </div>

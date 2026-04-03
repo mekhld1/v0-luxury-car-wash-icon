@@ -198,14 +198,14 @@ export default function CrewPage() {
       <main className="pt-14 lg:ml-60 lg:pt-0">
         <div className="p-4 sm:p-6 lg:p-8">
         {/* Header */}
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Crew</h1>
-            <p className="mt-1 text-muted-foreground">
+            <h1 className="text-xl font-bold text-foreground sm:text-2xl">Crew</h1>
+            <p className="mt-1 text-sm text-muted-foreground sm:text-base">
               Manage your field team
             </p>
           </div>
-          <Button onClick={handleAddMember} className="gap-2">
+          <Button onClick={handleAddMember} className="w-full gap-2 sm:w-auto">
             <Plus className="h-4 w-4" />
             Add Member
           </Button>
@@ -224,7 +224,7 @@ export default function CrewPage() {
         </div>
 
         {/* Search Bar */}
-        <div className="relative mb-6 max-w-md">
+        <div className="relative mb-6 w-full sm:max-w-md">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={searchQuery}
