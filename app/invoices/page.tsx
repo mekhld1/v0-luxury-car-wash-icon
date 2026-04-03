@@ -1,5 +1,6 @@
 "use client"
 
+// Invoices Management Page
 import { useState } from "react"
 import { DashboardSidebar } from "@/components/dashboard-sidebar"
 import { KpiCard } from "@/components/kpi-card"
@@ -503,7 +504,7 @@ export default function InvoicesPage() {
                       </TableCell>
                       <TableCell className="pr-6">
                         <div
-                          className="flex items-center justify-end gap-2"
+                          className="flex items-center justify-end gap-1"
                           onClick={(e) => e.stopPropagation()}
                         >
                           <Button
@@ -515,15 +516,24 @@ export default function InvoicesPage() {
                           >
                             <Eye className="h-4 w-4" />
                           </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8"
+                            onClick={() => handleDownloadPDF(invoice)}
+                            title="Download PDF"
+                          >
+                            <FileText className="h-4 w-4" />
+                          </Button>
                           {invoice.status === "Paid" && (
                             <Button
                               variant="ghost"
-                              size="sm"
-                              className="h-8 text-red-600 hover:bg-red-50 hover:text-red-700"
+                              size="icon"
+                              className="h-8 w-8 text-red-600 hover:bg-red-50 hover:text-red-700"
                               onClick={() => handleRefundClick(invoice)}
+                              title="Refund"
                             >
-                              <RotateCcw className="mr-1 h-3.5 w-3.5" />
-                              Refund
+                              <RotateCcw className="h-4 w-4" />
                             </Button>
                           )}
                         </div>
@@ -668,14 +678,37 @@ export default function InvoicesPage() {
                 </div>
               </div>
 
-              {/* Download Button */}
-              <Button
-                className="w-full gap-2"
-                onClick={() => handleDownloadPDF(selectedInvoice)}
-              >
-                <Download className="h-4 w-4" />
-                Download PDF
-              </Button>
+              {/* Action Buttons */}
+              <div className="flex flex-col gap-3">
+                <Button
+                  className="w-full gap-2"
+                  onClick={() => handleDownloadPDF(selectedInvoice)}
+                >
+                  <Download className="h-4 w-4" />
+                  Download PDF
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full gap-2"
+                  onClick={() => window.print()}
+                >
+                  <FileText className="h-4 w-4" />
+                  Print Invoice
+                </Button>
+                {selectedInvoice.status === "Paid" && (
+                  <Button
+                    variant="outline"
+                    className="w-full gap-2 text-red-600 hover:bg-red-50 hover:text-red-700"
+                    onClick={() => {
+                      setIsPanelOpen(false)
+                      handleRefundClick(selectedInvoice)
+                    }}
+                  >
+                    <RotateCcw className="h-4 w-4" />
+                    Refund Invoice
+                  </Button>
+                )}
+              </div>
             </div>
           </aside>
         </>
