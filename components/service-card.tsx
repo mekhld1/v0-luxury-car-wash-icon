@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
+import { SARAmount } from "@/components/sar-symbol"
 import { Clock, Pencil, Trash2 } from "lucide-react"
 import Image from "next/image"
 
@@ -97,7 +98,7 @@ export function ServiceCard({
                 {vehicle.label}
               </span>
               <span className="text-muted-foreground">
-                SAR {service.pricing[vehicle.key]}
+                <SARAmount amount={service.pricing[vehicle.key]} />
               </span>
             </span>
           ))}

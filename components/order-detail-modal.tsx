@@ -8,6 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
+import { SARAmount } from "@/components/sar-symbol"
 import {
   User,
   Phone,
@@ -191,17 +192,17 @@ export function OrderDetailModal({
             <div className="space-y-2 rounded-xl bg-muted/50 p-4">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Subtotal</span>
-                <span className="text-foreground">SAR {order.subtotal}</span>
+                <span className="text-foreground"><SARAmount amount={order.subtotal} /></span>
               </div>
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">VAT (15%)</span>
-                <span className="text-foreground">SAR {order.vat}</span>
+                <span className="text-foreground"><SARAmount amount={order.vat} /></span>
               </div>
               <div className="border-t border-border pt-2">
                 <div className="flex items-center justify-between">
                   <span className="font-medium text-foreground">Total</span>
                   <span className="text-lg font-bold text-primary">
-                    SAR {order.total}
+                    <SARAmount amount={order.total} />
                   </span>
                 </div>
               </div>

@@ -1,6 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
+import { SARAmount } from "@/components/sar-symbol"
 import { MapPin, Clock, User, Phone, Car } from "lucide-react"
 
 interface PendingOrder {
@@ -51,7 +52,7 @@ export function PendingOrderCard({
             {order.vehicleType}
           </div>
         </div>
-        <p className="text-lg font-bold text-primary">SAR {order.amount}</p>
+        <p className="text-lg font-bold text-primary"><SARAmount amount={order.amount} /></p>
       </div>
 
       {/* Customer Info */}

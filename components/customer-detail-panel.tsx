@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { SARAmount } from "@/components/sar-symbol"
 import {
   X,
   Phone,
@@ -127,7 +128,7 @@ export function CustomerDetailPanel({
                 <span className="text-sm">Total Spent</span>
               </div>
               <p className="mt-1 text-2xl font-bold text-foreground">
-                SAR {customer.totalSpent.toLocaleString()}
+                <SARAmount amount={customer.totalSpent} />
               </p>
             </div>
           </div>
@@ -191,7 +192,7 @@ export function CustomerDetailPanel({
                     </div>
                     <div className="flex items-center gap-3">
                       <span className="font-medium text-foreground">
-                        SAR {order.amount}
+                        <SARAmount amount={order.amount} />
                       </span>
                       <span
                         className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${statusStyles[order.status]}`}

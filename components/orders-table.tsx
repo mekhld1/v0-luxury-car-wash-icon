@@ -7,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { SARAmount } from "@/components/sar-symbol"
 
 type OrderStatus = "Pending" | "Active" | "Completed" | "Cancelled"
 
@@ -115,7 +116,7 @@ export function OrdersTable() {
                   {order.status}
                 </span>
               </TableCell>
-              <TableCell className="font-medium">SAR {order.amount}</TableCell>
+              <TableCell className="font-medium"><SARAmount amount={order.amount} /></TableCell>
               <TableCell className="pr-6 text-muted-foreground">
                 {order.date}
               </TableCell>

@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { DashboardSidebar } from "@/components/dashboard-sidebar"
 import { KpiCard } from "@/components/kpi-card"
+import { SARAmount, SARSymbol } from "@/components/sar-symbol"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -402,7 +403,7 @@ export default function EarningsPage() {
                     Total Revenue
                   </p>
                   <p className="truncate text-lg font-bold text-foreground sm:text-xl md:text-2xl">
-                    {stats.totalRevenue.toLocaleString()} SAR
+                    <SARAmount amount={stats.totalRevenue} />
                   </p>
                 </div>
               </div>
@@ -412,7 +413,7 @@ export default function EarningsPage() {
           <KpiCard
             icon={Receipt}
             label="VAT Collected"
-            value={`SAR ${stats.vatCollected.toLocaleString()}`}
+            value={<SARAmount amount={stats.vatCollected} />}
           />
           <KpiCard
             icon={CheckCircle2}
@@ -422,7 +423,7 @@ export default function EarningsPage() {
           <KpiCard
             icon={TrendingUp}
             label="Avg. Order Value"
-            value={`SAR ${stats.avgOrderValue}`}
+            value={<SARAmount amount={stats.avgOrderValue} />}
           />
         </div>
 
@@ -477,7 +478,7 @@ export default function EarningsPage() {
                           {service.orders}
                         </TableCell>
                         <TableCell className="text-right font-medium">
-                          SAR {service.revenue.toLocaleString()}
+                          <SARAmount amount={service.revenue} />
                         </TableCell>
                       </TableRow>
                     ))}
@@ -513,7 +514,7 @@ export default function EarningsPage() {
                           {crew.orders}
                         </TableCell>
                         <TableCell className="text-right font-medium">
-                          SAR {crew.revenue.toLocaleString()}
+                          <SARAmount amount={crew.revenue} />
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center gap-2">
@@ -565,10 +566,10 @@ export default function EarningsPage() {
                         {service.orders}
                       </TableCell>
                       <TableCell className="text-right font-medium">
-                        SAR {service.revenue.toLocaleString()}
+                        <SARAmount amount={service.revenue} />
                       </TableCell>
                       <TableCell className="text-right text-muted-foreground">
-                        SAR {Math.round(service.revenue / service.orders)}
+                        <SARAmount amount={Math.round(service.revenue / service.orders)} />
                       </TableCell>
                       <TableCell className="text-right">
                         <span
@@ -623,10 +624,10 @@ export default function EarningsPage() {
                         {crew.orders}
                       </TableCell>
                       <TableCell className="text-right font-medium">
-                        SAR {crew.revenue.toLocaleString()}
+                        <SARAmount amount={crew.revenue} />
                       </TableCell>
                       <TableCell className="text-right text-muted-foreground">
-                        SAR {Math.round(crew.revenue / crew.orders)}
+                        <SARAmount amount={Math.round(crew.revenue / crew.orders)} />
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
@@ -691,10 +692,10 @@ export default function EarningsPage() {
                         {invoice.paymentMethod}
                       </TableCell>
                       <TableCell className="text-right text-muted-foreground">
-                        {invoice.vat} SAR
+                        <SARAmount amount={invoice.vat} />
                       </TableCell>
                       <TableCell className="text-right font-medium">
-                        {invoice.total} SAR
+                        <SARAmount amount={invoice.total} />
                       </TableCell>
                       <TableCell>
                         <Badge
@@ -769,7 +770,7 @@ export default function EarningsPage() {
                   <div>
                     <p className="text-muted-foreground">Amount</p>
                     <p className="font-medium text-red-600">
-                      {refundInvoice.total} SAR
+                      <SARAmount amount={refundInvoice.total} />
                     </p>
                   </div>
                 </div>

@@ -4,6 +4,7 @@ import { useState } from "react"
 import { DashboardSidebar } from "@/components/dashboard-sidebar"
 import { KpiCard } from "@/components/kpi-card"
 import { CustomerDetailPanel } from "@/components/customer-detail-panel"
+import { SARAmount } from "@/components/sar-symbol"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -304,7 +305,7 @@ export default function CustomersPage() {
           <KpiCard
             icon={Wallet}
             label="Total Revenue"
-            value={`SAR ${stats.totalRevenue.toLocaleString()}`}
+            value={<SARAmount amount={stats.totalRevenue} />}
           />
         </div>
 
@@ -386,7 +387,7 @@ export default function CustomersPage() {
                       )}
                     </TableCell>
                     <TableCell className="font-medium text-foreground">
-                      SAR {customer.totalSpent.toLocaleString()}
+                      <SARAmount amount={customer.totalSpent} />
                     </TableCell>
                     <TableCell className="pr-6">
                       <div className="flex justify-end">

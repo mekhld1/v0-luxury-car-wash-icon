@@ -10,6 +10,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
+import { SARAmount } from "@/components/sar-symbol"
 import { Car, User, CheckCircle2 } from "lucide-react"
 
 interface CrewMember {
@@ -73,7 +74,7 @@ export function AssignOrderModal({
             <span className="text-sm font-medium text-muted-foreground">
               {order.id}
             </span>
-            <span className="font-bold text-primary">SAR {order.amount}</span>
+            <span className="font-bold text-primary"><SARAmount amount={order.amount} /></span>
           </div>
           <p className="font-medium text-foreground">{order.service}</p>
           <p className="text-sm text-muted-foreground">

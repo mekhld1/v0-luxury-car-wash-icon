@@ -6,6 +6,7 @@ import { KpiCard } from "@/components/kpi-card"
 import { PendingOrderCard } from "@/components/pending-order-card"
 import { AssignOrderModal } from "@/components/assign-order-modal"
 import { OrderDetailModal } from "@/components/order-detail-modal"
+import { SARAmount } from "@/components/sar-symbol"
 import { Button } from "@/components/ui/button"
 import {
   Table,
@@ -384,7 +385,7 @@ export default function OrdersPage() {
                     {order.paymentMethod}
                   </TableCell>
                   <TableCell className="font-medium text-foreground">
-                    SAR {order.amount}
+                    <SARAmount amount={order.amount} />
                   </TableCell>
                   <TableCell>
                     <span

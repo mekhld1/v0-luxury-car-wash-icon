@@ -1,6 +1,7 @@
 import { DashboardSidebar } from "@/components/dashboard-sidebar"
 import { KpiCard } from "@/components/kpi-card"
 import { OrdersTable } from "@/components/orders-table"
+import { SARAmount } from "@/components/sar-symbol"
 import {
   ShoppingBag,
   Banknote,
@@ -43,13 +44,13 @@ export default function DashboardPage() {
             <KpiCard
               icon={Banknote}
               label="Revenue Today"
-              value="SAR 8,450"
+              value={<SARAmount amount={8450} />}
               trend={{ value: 8, isPositive: true }}
             />
             <KpiCard
               icon={TrendingUp}
               label="Monthly Revenue"
-              value="SAR 142,500"
+              value={<SARAmount amount={142500} />}
               trend={{ value: 15, isPositive: true }}
             />
             <KpiCard
