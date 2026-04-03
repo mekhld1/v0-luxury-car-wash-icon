@@ -277,11 +277,53 @@ export default function InvoicesPage() {
   })
 
   const handleExportCSV = () => {
-    console.log("Exporting to CSV...")
+    const headers = [
+      "Invoice ID",
+      "Order ID",
+      "Date",
+      "Customer Name",
+      "Customer Phone",
+      "Service",
+      "Vehicle",
+      "Payment Method",
+      "Subtotal (SAR)",
+      "VAT (SAR)",
+      "Total (SAR)",
+      "Status",
+    ]
+
+    const rows = filteredInvoices.map((invoice) => [
+      invoice.id,
+      invoice.orderId,
+      invoice.date,
+      invoice.customerName,
+      invoice.customerPhone,
+      invoice.service,
+      invoice.vehicleType,
+      invoice.paymentMethod,
+      invoice.subtotal.toFixed(2),
+      invoice.vat.toFixed(2),
+      invoice.total.toFixed(2),
+      invoice.status,
+    ])
+
+    const csvContent = [
+      headers.join(","),
+      ...rows.map((row) => row.map((cell) => `"${cell}"`).join(",")),
+    ].join("\n")
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
+    const link = document.createElement("a")
+    link.href = URL.createObjectURL(blob)
+    link.download = `invoices_${new Date().toISOString().split("T")[0]}.csv`
+    link.click()
+    URL.revokeObjectURL(link.href)
   }
 
   const handleExportPDF = () => {
-    console.log("Exporting to PDF...")
+    // For PDF export, we would typically use a library like jsPDF or html2pdf
+    // For now, we'll trigger print which allows saving as PDF
+    window.print()
   }
 
   const handleViewInvoice = (invoice: Invoice) => {
