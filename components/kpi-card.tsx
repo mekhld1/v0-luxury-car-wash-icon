@@ -20,6 +20,9 @@ import {
   Package,
   Layers,
   Calendar,
+  DollarSign,
+  Store,
+  Building2,
 } from "lucide-react"
 import type { ReactNode } from "react"
 
@@ -42,6 +45,9 @@ const iconMap = {
   "package": Package,
   "layers": Layers,
   "calendar": Calendar,
+  "dollar-sign": DollarSign,
+  "store": Store,
+  "building": Building2,
 } as const
 
 export type KpiIconName = keyof typeof iconMap
